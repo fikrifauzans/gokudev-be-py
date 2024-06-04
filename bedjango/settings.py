@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-daj3w^%anho-ohf(*ot%$nmt@7$qdf%h3+d^0_)@kv(7-_%*d$"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("APP_DEBUG", default=True)
 
 ALLOWED_HOSTS = []
 
@@ -81,12 +82,12 @@ WSGI_APPLICATION = "bedjango.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "db_gokudev_py",
-        "USER": "username",
-        "PASSWORD": "",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.postgresql"),
+        "NAME": os.getenv("DB_NAME", default="db_gokudev_py"),
+        "USER": os.getenv("DB_USERNAME", default="username"),
+        "PASSWORD": os.getenv("DB_PASSWORD", default=""),
+        "HOST": os.getenv("DB_HOST", default="localhost"),
+        "PORT": os.getenv("DB_PORT", default="5432"),
     }
 }
 
@@ -139,19 +140,27 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
 
+
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": True,
-    "UPDATE_LAST_LOGIN": False,
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": SECRET_KEY,
-    "VERIFYING_KEY": None,
-    "AUDIENCE": None,
-    "ISSUER": None,
-    "AUTH_HEADER_TYPES": ("Bearer",),
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        minutes=os.getenv("JWT_ACCESS_TOKEN_LIFETIME", default=5)
+    ),
+    "REFRESH_TOKEN_LIFETIME": timedelta(
+        days=os.getenv("JWT_REFRESH_TOKEN_LIFETIME", default=1)
+    ),
+    "ROTATE_REFRESH_TOKENS": os.getenv("JWT_ROTATE_REFRESH_TOKENS", default=False),
+    "BLACKLIST_AFTER_ROTATION": os.getenv("JWT_BLACKLIST_AFTER_ROTATION", default=True),
+    "UPDATE_LAST_LOGIN": os.getenv("JWT_UPDATE_LAST_LOGIN", default=False),
+    "ALGORITHM": os.getenv("JWT_ALGORITHM", default="HS256"),
+    "SIGNING_KEY": os.getenv(
+        "JWT_SECRET_KEY",
+        default="django-insecure-daj3w^%anho-ohf(*ot%$nmt@7$qdf%h3+d^0_)@kv(7-_%*d$",
+    ),
+    "VERIFYING_KEY": os.getenv("JWT_VERIFYING_KEY", default=None),
+    "AUDIENCE": os.getenv("JWT_AUDIENCE", default=None),
+    "ISSUER": os.getenv("JWT_ISSUER", default=None),
+    "AUTH_HEADER_TYPES": (os.getenv("JWT_AUTH_HEADER_TYPES", default="Bearer")),
+    "AUTH_HEADER_NAME": os.getenv("JWT_AUTH_HEADER_NAME", default="HTTP_AUTHORIZATION"),
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
