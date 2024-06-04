@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,15 +85,15 @@ WSGI_APPLICATION = "bedjango.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.postgresql"),
-        "NAME": os.getenv("DB_NAME", default="db_gokudev_py"),
-        "USER": os.getenv("DB_USERNAME", default="username"),
-        "PASSWORD": os.getenv("DB_PASSWORD", default=""),
-        "HOST": os.getenv("DB_HOST", default="localhost"),
-        "PORT": os.getenv("DB_PORT", default="5432"),
-    }
-}
+       "default": {
+           "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.postgresql"),
+           "NAME": os.getenv("DB_NAME", default="db_gokudev"),
+           "USER": os.getenv("DB_USERNAME", default="username"),
+           "PASSWORD": os.getenv("DB_PASSWORD", default=""),
+           "HOST": os.getenv("DB_HOST", default="localhost"),
+           "PORT": os.getenv("DB_PORT", default="5432"),
+       }
+   }
 
 
 # Password validation
@@ -144,23 +147,23 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(
-        minutes=os.getenv("JWT_ACCESS_TOKEN_LIFETIME", default=5)
+        minutes=int(os.getenv("JWT_ACCESS_TOKEN_LIFETIME", default=5))
     ),
     "REFRESH_TOKEN_LIFETIME": timedelta(
-        days=os.getenv("JWT_REFRESH_TOKEN_LIFETIME", default=1)
+        days=int(os.getenv("JWT_REFRESH_TOKEN_LIFETIME", default=1))
     ),
-    "ROTATE_REFRESH_TOKENS": os.getenv("JWT_ROTATE_REFRESH_TOKENS", default=False),
-    "BLACKLIST_AFTER_ROTATION": os.getenv("JWT_BLACKLIST_AFTER_ROTATION", default=True),
-    "UPDATE_LAST_LOGIN": os.getenv("JWT_UPDATE_LAST_LOGIN", default=False),
+    "ROTATE_REFRESH_TOKENS": os.getenv("JWT_ROTATE_REFRESH_TOKENS", default="False").lower() in ['true', '1', 't', 'y', 'yes'],
+    "BLACKLIST_AFTER_ROTATION": os.getenv("JWT_BLACKLIST_AFTER_ROTATION", default="True").lower() in ['true', '1', 't', 'y', 'yes'],
+    "UPDATE_LAST_LOGIN": os.getenv("JWT_UPDATE_LAST_LOGIN", default="False").lower() in ['true', '1', 't', 'y', 'yes'],
     "ALGORITHM": os.getenv("JWT_ALGORITHM", default="HS256"),
     "SIGNING_KEY": os.getenv(
         "JWT_SECRET_KEY",
-        default="django-insecure-daj3w^%anho-ohf(*ot%$nmt@7$qdf%h3+d^0_)@kv(7-_%*d$",
+        default="django-insecure-daj3w^%anho-ohf(*ot%$nmt@7$qdf%h3+d^0_)@kv(7-_%*d$"
     ),
     "VERIFYING_KEY": os.getenv("JWT_VERIFYING_KEY", default=None),
     "AUDIENCE": os.getenv("JWT_AUDIENCE", default=None),
     "ISSUER": os.getenv("JWT_ISSUER", default=None),
-    "AUTH_HEADER_TYPES": (os.getenv("JWT_AUTH_HEADER_TYPES", default="Bearer")),
+    "AUTH_HEADER_TYPES": (os.getenv("JWT_AUTH_HEADER_TYPES", default="Bearer"),),
     "AUTH_HEADER_NAME": os.getenv("JWT_AUTH_HEADER_NAME", default="HTTP_AUTHORIZATION"),
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",

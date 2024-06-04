@@ -6,11 +6,17 @@ class Response:
     code: int
     data: dict
     meta: dict
+    tokens: dict
 
-    def __init__(self, message: str = "", code: int = 0, data: dict = None):
+    def __init__(self, message: str = "", code: int = 0, data: dict = None, tokens: dict = None):
         self.message = message
         self.code = code
         self.data = data if data is not None else {}
+        self.tokens = tokens if tokens is not None else {}
+
+    def set_tokens(self, tokens: dict) -> "Response":
+        self.tokens = tokens
+        return self
 
     def set_message(self, message: str = "") -> "Response":
         self.message = message
@@ -27,6 +33,9 @@ class Response:
     def set_meta(self, meta: dict = {}) -> "Response":
         self.meta = meta
         return self
+    
+    def get_tokens(self) -> dict:
+        return self.tokens
 
     def get_message(self) -> str:
         return self.message
@@ -41,12 +50,12 @@ class Response:
         return self.meta
 
     def get_response(self) -> Res:
-        return Res(
-            {
-                "status": self.get_code(),
-                "message": self.get_message(),
-                "data": self.get_data(),
-                "meta": self.get_meta(),
-            },
-            self.get_code(),
-        )
+        response_data = {
+            "status": self.get_code(),
+            "message": self.get_message(),
+            "data": self.get_data(),
+            "meta": self.get_meta(),
+        }
+        if self.tokens:
+            response_data["data"].update(self.tokens)  # Menambahkan tokens ke data jika ada
+        return Res(response_data, self.get_code())

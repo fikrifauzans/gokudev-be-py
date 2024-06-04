@@ -15,3 +15,6 @@ django-admin startapp quickstart
 
 # Install Pygments
 pip install pygments
+
+# Install Dotenv
+pip install python-dotenv
