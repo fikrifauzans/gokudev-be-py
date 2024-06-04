@@ -1,4 +1,4 @@
-from rest_framework.response import Response
+from rest_framework.response import Response as Res
 
 
 class Response:
@@ -31,7 +31,7 @@ class Response:
     def get_message(self) -> str:
         return self.message
 
-    def get_status(self) -> int:
+    def get_code(self) -> int:
         return self.code
 
     def get_data(self) -> dict:
@@ -40,12 +40,13 @@ class Response:
     def get_meta(self) -> dict:
         return self.meta
 
-    def get_response(self) -> dict:
-        return Response(
+    def get_response(self) -> Res:
+        return Res(
             {
-                "status": self.get_status,
-                "message": self.get_message,
-                "data": self.get_data,
-                "meta": self.get_meta,
-            }
+                "status": self.get_code(),
+                "message": self.get_message(),
+                "data": self.get_data(),
+                "meta": self.get_meta(),
+            },
+            self.get_code(),
         )

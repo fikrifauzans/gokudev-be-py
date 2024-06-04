@@ -12,3 +12,6 @@ pip install django-filter
 django-admin startproject tutorial .  # Note the trailing '.' character
 
 django-admin startapp quickstart
+
+# Install Pygments
+pip install pygments

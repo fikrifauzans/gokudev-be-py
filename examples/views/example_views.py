@@ -1,26 +1,32 @@
-from rest_framework.views import APIView
 from bedjango.base_view import BaseAPIView
 from rest_framework.response import Response
-
+from rest_framework import status
+from bedjango.handler.status_message import *
 
 class ExampleList(BaseAPIView):
 
     def get(self, request, format=None):
-        # snippets = Snippet.objects.all()
-        # serializer = SnippetSerializer(snippets, many=True)
-        # return Response(serializer.data)
-        return Response({})
+
+        return (
+            self.response.set_message(DEFAULT_MESSAGE_HTTP_200)
+            .set_code(status.HTTP_200_OK)
+            .set_meta({})
+            .set_data({})
+            .get_response()
+        )
 
     def post(self, request, format=None):
-        #     serializer = SnippetSerializer(data=request.data)
-        #     if serializer.is_valid():
-        #         serializer.save()
-        #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({})
+
+        return (
+            self.response.set_message(DEFAULT_MESSAGE_HTTP_201)
+            .set_code(status.HTTP_201_CREATED)
+            .set_meta({})
+            .set_data({})
+            .get_response()
+        )
 
 
-class ExampleDetail(APIView):
+class ExampleDetail(BaseAPIView):
 
     def get_object(self, pk):
         # try:

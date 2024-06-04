@@ -1,3 +1,7 @@
+from django.urls import path, include
 
-from django.urls import path
-
+# from examples.models import
+urlpatterns = [
+    path("examples/", include("examples.route.example_url")),
+    # ${GENERATOR_PARAM}
+]
