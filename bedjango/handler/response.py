@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 
+
 class Response:
     message: str
     code: int
@@ -40,9 +41,11 @@ class Response:
         return self.meta
 
     def get_response(self) -> dict:
-        return Response({
-            "status": self.get_status,
-            "message": self.get_message,
-            "data": self.get_data,
-            "meta": self.get_meta,
-        })
+        return Response(
+            {
+                "status": self.get_status,
+                "message": self.get_message,
+                "data": self.get_data,
+                "meta": self.get_meta,
+            }
+        )

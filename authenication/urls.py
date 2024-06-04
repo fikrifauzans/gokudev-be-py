@@ -1,7 +1,7 @@
 # users/urls.py
 
 from django.urls import path
-from rest_framework_simplejwt.views import ( # type: ignore
+from rest_framework_simplejwt.views import (  # type: ignore
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView,

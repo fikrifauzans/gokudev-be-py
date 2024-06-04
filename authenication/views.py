@@ -8,12 +8,12 @@ from .serializers import UserSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 import socket
+import os
 
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def register(request):
-
     username = request.data.get("username")
     password = request.data.get("password")
     email = request.data.get("email")
@@ -23,7 +23,6 @@ def register(request):
             {"error": "Please provide all required fields"},
             status=status.HTTP_400_BAD_REQUEST,
         )
-
     if User.objects.filter(username=username).exists():
         return Response(
             {"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST
@@ -48,14 +47,3 @@ def logout_view(request):
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def login_view(request):
-    HOST = "localhost"  # The server's hostname or IP address
-    PORT = 8000  # The port used by the server
-    msg = {"username": request.data.username, "password": request.data.password}
-    cl = len(msg)
-    pr = f"POST api/auth HTTP/1.1\r\nHost:{HOST}:{PORT}\r\nContent-Type: application/json\r\nContent-Length: {cl}\r\n\r\n"
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        s.sendall((pr + msg).encode())
-        response = s.recv(1024)  # Receive response from the server
-    return response.decode()  # Assuming you want to return the response from the server

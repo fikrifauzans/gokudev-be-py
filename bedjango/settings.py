@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "examples",
     "authenication",
     "rest_framework",
     "rest_framework.authtoken",  # If you plan to use token authentication
