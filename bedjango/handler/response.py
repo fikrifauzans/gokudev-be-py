@@ -8,7 +8,9 @@ class Response:
     meta: dict
     tokens: dict
 
-    def __init__(self, message: str = "", code: int = 0, data: dict = None, tokens: dict = None):
+    def __init__(
+        self, message: str = "", code: int = 0, data: dict = None, tokens: dict = None
+    ):
         self.message = message
         self.code = code
         self.data = data if data is not None else {}
@@ -33,7 +35,7 @@ class Response:
     def set_meta(self, meta: dict = {}) -> "Response":
         self.meta = meta
         return self
-    
+
     def get_tokens(self) -> dict:
         return self.tokens
 
@@ -57,5 +59,7 @@ class Response:
             "meta": self.get_meta(),
         }
         if self.tokens:
-            response_data["data"].update(self.tokens)  # Menambahkan tokens ke data jika ada
+            response_data["data"].update(
+                self.tokens
+            )  # Menambahkan tokens ke data jika ada
         return Res(response_data, self.get_code())

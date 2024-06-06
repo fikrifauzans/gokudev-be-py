@@ -9,7 +9,7 @@ class ExampleSerializer(serializers.Serializer):
     smallint = serializers.IntegerField(required=False)
     integer = serializers.IntegerField(required=False)
     biginteger = serializers.IntegerField(required=False)
-    boolean = serializers.BooleanField(required=True)
+     boolean = serializers.BooleanField(required=True)
     date = serializers.DateField(required=False)
     datetime = serializers.DateTimeField(required=False)
     time = serializers.TimeField(required=False)
