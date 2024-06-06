@@ -13,10 +13,10 @@ class ExampleList(BaseAPIView):
         super().__init__(*args, **kwargs)
         self._service = ExampleService
 
-    def get_service(self) -> ExampleService():
+    def get_service(self) -> (ExampleService):
         return self._service()
 
-    def get(self, request, format=None) -> Response:
+    def get(self, request, format=None):
         data = self.get_service().get(request)
 
         return (

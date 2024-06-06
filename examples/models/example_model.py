@@ -30,4 +30,7 @@ class ExampleModel(models.Model):
     deleted_by = models.BigIntegerField(null=True)
 
     class Meta:
+        db_table = 'examples_example_table'
         ordering = ["created_by"]
+        verbose_name = "Example Model"
+        verbose_name_plural = "Example Models"
