@@ -13,65 +13,68 @@ class ExampleList(BaseAPIView):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self._service = ExampleService
+        self._service = ExampleService()
         self._dto = ExampleDTO
 
     def get_service(self) -> ExampleService:
-        return self._service()
+        return self._service
 
-    def get_dto(self, query_set) -> ExampleDTO:
-        return self._dto(query_set)
+    def get_dto(self, request) -> ExampleDTO:
+        return self._dto(request)
 
     def get(self, request: any, format=None) -> Response:
         query_params: ExampleDTO = self.get_dto(request)
         data: dict = self.get_service().get(query_params)
         return (
-            self.get_response()
+            self.response()
             .set_message(DEFAULT_MESSAGE_HTTP_200)
             .set_code(status.HTTP_200_OK)
-            .set_meta({})
-            .set_data(data)
+            .set_meta(data.meta)
+            .set_data(data.data)
             .get_response()
         )
 
     def post(self, request, format=None) -> Response:
-
+        dto: ExampleDTO = self.get_dto(request)
+        created_data = self.get_service().create(dto._body_set)
         return (
-            self.get_response()
+            self.response()
             .set_message(DEFAULT_MESSAGE_HTTP_201)
             .set_code(status.HTTP_201_CREATED)
-            .set_meta({})
-            .set_data({})
+            .set_data(created_data)
             .get_response()
         )
 
 
 class ExampleDetail(BaseAPIView):
 
+    _service: ExampleService
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self._service = ExampleService()
+
     def get_object(self, pk):
-        # try:
-        #     return Snippet.objects.get(pk=pk)
-        # except Snippet.DoesNotExist:
-        #     raise Http404
-        return Response({})
+        return self._service.get_by_id(pk)
 
     def get(self, request, pk, format=None):
-        # snippet = self.get_object(pk)
-        # serializer = SnippetSerializer(snippet)
-        # return Response(serializer.data)
-        return Response({})
+        obj = self.get_object(pk)
+        if obj:
+            return Response(obj, status=status.HTTP_200_OK)
+        return Response({"message": "Not found"}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk, format=None):
-        # snippet = self.get_object(pk)
-        # serializer = SnippetSerializer(snippet, data=request.data)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return Response(serializer.data)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({})
+        obj = self.get_object(pk)
+        if obj:
+            updated_data = self._service.update(pk, request.data)
+            return Response(updated_data, status=status.HTTP_200_OK)
+        return Response({"message": "Not found"}, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, pk, format=None):
-        # snippet = self.get_object(pk)
-        # snippet.delete()
-        # return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response({})
+        obj = self.get_object(pk)
+        if obj:
+            self._service.delete(pk)
+            return Response(
+                {"message": "Deleted successfully"}, status=status.HTTP_204_NO_CONTENT
+            )
+        return Response({"message": "Not found"}, status=status.HTTP_404_NOT_FOUND)

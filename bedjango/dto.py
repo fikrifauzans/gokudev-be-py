@@ -7,7 +7,7 @@ class DTO:
         q = {}
         for key, value in query_set.items():
             if "like" in key:
-                q[f"{key.replace('like', 'icontains')}"] = query_set[key]
+                q[f"{key.replace('like', '_icontains')}"] = query_set[key]
         return q
 
     def set_is_null(self, query):

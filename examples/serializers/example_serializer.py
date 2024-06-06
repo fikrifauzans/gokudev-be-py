@@ -4,11 +4,11 @@ from examples.models.example_model import ExampleModel, LANGUAGE_CHOICES, STYLE_
 
 class ExampleSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    string = serializers.CharField(required=False)
-    text = serializers.CharField(required=False)
-    smallint = serializers.IntegerField(required=False)
-    integer = serializers.IntegerField(required=False)
-    biginteger = serializers.IntegerField(required=False)
+    string = serializers.CharField(required=False, max_length=255)
+    text = serializers.CharField(required=False, max_length=1024)
+    smallint = serializers.IntegerField(required=False, min_value=-32768, max_value=32767)
+    integer = serializers.IntegerField(required=False, min_value=-2147483648, max_value=2147483647)
+    biginteger = serializers.IntegerField(required=False, min_value=-9223372036854775808, max_value=9223372036854775807)
     boolean = serializers.BooleanField(required=True)
     date = serializers.DateField(required=False)
     datetime = serializers.DateTimeField(required=False)
@@ -18,9 +18,9 @@ class ExampleSerializer(serializers.Serializer):
     updated_at = serializers.DateTimeField(required=False)
     deleted_at = serializers.DateTimeField(required=False)
 
-    created_by = serializers.IntegerField(required=False)
-    updated_by = serializers.IntegerField(required=False)
-    deleted_by = serializers.IntegerField(required=False)
+    created_by = serializers.IntegerField(required=False, min_value=1)
+    updated_by = serializers.IntegerField(required=False, min_value=1)
+    deleted_by = serializers.IntegerField(required=False, min_value=1)
 
     def create(self, validated_data):
         """

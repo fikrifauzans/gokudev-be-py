@@ -12,3 +12,6 @@ class BaseAPIView(APIView):
 
     def get_response(self) -> Response():
         return self._response()
+    
+    def response(self) -> Response():
+        return self._response()
