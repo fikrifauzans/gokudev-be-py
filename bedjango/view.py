@@ -6,7 +6,7 @@ class BaseAPIView(APIView):
 
     _response = Response
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._response = Response
 
